@@ -21,11 +21,11 @@ public class PlayerMovement : MonoBehaviour
 
     public Sprite leftSprite;
 
-    public Sprite rightSprite;
-
     private Vector2 dir;
 
     private float speed;
+
+    public bool isInMenu;
 
 
     void Start()
@@ -38,31 +38,34 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        dir.x = Input.GetAxisRaw("Horizontal");
-        dir.y = Input.GetAxisRaw("Vertical");
-        rb.MovePosition(rb.position + dir * speed * Time.fixedDeltaTime);
-        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+        if (!isInMenu)
         {
-            if (dir.x > 0)
+            dir.x = Input.GetAxisRaw("Horizontal");
+            dir.y = Input.GetAxisRaw("Vertical");
+            rb.MovePosition(rb.position + dir * speed * Time.fixedDeltaTime);
+            if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
             {
-                spriteRenderer.sprite = leftSprite;
-                spriteRenderer.flipX = true;
+                if (dir.x > 0)
+                {
+                    spriteRenderer.sprite = leftSprite;
+                    spriteRenderer.flipX = true;
+                }
+                else if (dir.x < 0)
+                {
+                    spriteRenderer.sprite = leftSprite;
+                    spriteRenderer.flipX = false;
+                }
             }
-            else if (dir.x < 0)
+            else
             {
-                spriteRenderer.sprite = leftSprite;
-                spriteRenderer.flipX = false;
-            }
-        }
-        else
-        {
-            if (dir.y > 0)
-            {
-                spriteRenderer.sprite = topSprite;
-            }
-            else if (dir.y < 0)
-            {
-                spriteRenderer.sprite = bottomSprite;
+                if (dir.y > 0)
+                {
+                    spriteRenderer.sprite = topSprite;
+                }
+                else if (dir.y < 0)
+                {
+                    spriteRenderer.sprite = bottomSprite;
+                }
             }
         }
     }
