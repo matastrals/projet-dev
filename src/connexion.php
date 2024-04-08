@@ -11,13 +11,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
 <html>
 <body>
-  <h1>Page d'accueil</h1>
-    <p>Bienvenue sur notre site!</p>
-      <a href="connexion.php">Se connecter</a>
-      <a href="inscription.php">S'inscrire</a>
-      <a href="claim.php">Claim ton item !</a>
+
+
+<h2>Connexion</h2>
+  <form action="get.php" method="post">
+    E-mail: <input type="text" name="email"><br>
+    Mot de passe: <input type="password" name="password"><br>
+    <input type="submit" name="login" value="Se connecter">
+  </form>
+
 </body>
 </html>

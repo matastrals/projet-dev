@@ -37,25 +37,35 @@ CREATE TABLE players
   (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
-    email VARCHAR(100) NOT NULL
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
   );
 
-INSERT INTO players (username, email) VALUES
-('joueur1', 'joueur1@example.com'),
-('joueur2', 'joueur2@example.com');
+INSERT INTO players (username, email, password) VALUES
+('joueur1', 'joueur1@example.com', 'joueur'),
+('joueur2', 'joueur2@example.com', 'joueur');
 
 CREATE TABLE rewards 
   (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    player_id INT NOT NULL,
     reward_name VARCHAR(100) NOT NULL,
     amount INT NOT NULL
   );
 
-INSERT INTO rewards (player_id, reward_name, amount) VALUES
-(1, 'Récompense 1', 100),
-(1, 'Récompense 2', 50),
-(2, 'Récompense 3', 200);
+CREATE TABLE user_rewards (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    reward_id INT NOT NULL,
+    claim_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES players(id),
+    FOREIGN KEY (reward_id) REFERENCES rewards(id)
+);
+
+
+INSERT INTO rewards (reward_name, amount) VALUES
+('Récompense 1', 100),
+('Récompense 2', 50),
+('Récompense 3', 200);
 EOF
 
 systemctl restart mariadb

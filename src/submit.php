@@ -9,21 +9,21 @@ $conn = new mysqli($host, $username, $password, $database);
 
 // Vérification de la connexion
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("La connexion a échoué : " . $conn->connect_error);
 }
 
 // Préparation de la requête SQL d'insertion
-$sql = 'INSERT INTO players (username, email) VALUES (?, ?)';
+$sql = 'INSERT INTO players (username, email, password) VALUES (?, ?, ?)';
 $stmt = $conn->prepare($sql);
 
 // Liaison des valeurs aux paramètres de la requête
-$stmt->bind_param('ss', $_POST["name"], $_POST["email"]);
+$stmt->bind_param('sss', $_POST["name"], $_POST["email"], $_POST["password"]);
 
 // Exécution de la requête
 if ($stmt->execute()) {
-    echo "New record created successfully";
+    echo "Nouvel enregistrement créé avec succès";
 } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    echo "Erreur : " . $sql . "<br>" . $conn->error;
 }
 
 // Fermeture de la connexion
