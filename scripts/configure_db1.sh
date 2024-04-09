@@ -63,9 +63,9 @@ CREATE TABLE user_rewards (
 
 
 INSERT INTO rewards (reward_name, amount) VALUES
-('Récompense 1', 100),
-('Récompense 2', 50),
-('Récompense 3', 200);
+('botte du pourfendeur de feu', 100),
+('armure du bourrin au cote amortie', 50),
+('sabre mal programmer', 200);
 EOF
 
 systemctl restart mariadb

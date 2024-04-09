@@ -1,4 +1,9 @@
 <?php
+usleep(50);
+
+// Redirection vers une autre page
+header("Location: index.php");
+
 $host = getenv('DB_HOST');
 $database = getenv('DB_DATABASE');
 $username = getenv('DB_USERNAME');
@@ -26,5 +31,4 @@ if ($stmt->execute()) {
     echo "Erreur : " . $sql . "<br>" . $conn->error;
 }
 
-// Fermeture de la connexion
 $conn->close();
