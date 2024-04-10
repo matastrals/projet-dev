@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -38,6 +37,12 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        Vector3 position = transform.position;
+
+        PlayerPrefs.SetFloat("Position X", position.x);
+        PlayerPrefs.SetFloat("Position Y", position.y);
+
+        PlayerPrefs.Save();
         if (!isInMenu)
         {
             dir.x = Input.GetAxisRaw("Horizontal");
@@ -69,5 +74,4 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
 }
