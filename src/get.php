@@ -44,6 +44,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         echo "Aucun utilisateur trouvé avec ces identifiants.";
     }
 }
-
 // Fermeture de la connexion
 $conn->close();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<a href="index.php" style="display: inline-block;
+padding: 10px 20px;
+background-color: #9f9f9f;
+color: white;
+text-decoration: none;
+border-radius: 5px;
+"
+
+>
+Retour
+</a>
+</body>
+</html>
+

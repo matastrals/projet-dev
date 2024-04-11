@@ -29,6 +29,8 @@ mysql -u root <<EOF
 CREATE DATABASE app_nulle;
 CREATE USER 'db1'@'10.5.1.11' IDENTIFIED BY 'db1';
 GRANT ALL PRIVILEGES ON app_nulle.* TO 'db1'@'10.5.1.11';
+CREATE USER 'db1'@'%' IDENTIFIED BY 'db1';
+GRANT ALL PRIVILEGES ON app_nulle.* TO 'db1'@'%';
 FLUSH PRIVILEGES;
 
 USE app_nulle;
