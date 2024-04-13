@@ -5,14 +5,16 @@ using UnityEngine;
 
 public class InventoryScript : MonoBehaviour
 {
-
     private PlayerMovement playerMovement;
 
     private Canvas inventory;
 
     private MenuScript menu;
+
+    private ChatScript chatScript;
     void Start()
     {
+        chatScript = FindObjectOfType<ChatScript>();
         playerMovement = FindObjectOfType<PlayerMovement>();
         inventory = GameObject.Find("Inventory").GetComponent<Canvas>();
         menu = FindObjectOfType<MenuScript>();
@@ -28,12 +30,14 @@ public class InventoryScript : MonoBehaviour
                 menu.enabled = true;
                 playerMovement.isInMenu = false;
                 inventory.enabled = false;
+                chatScript.enabled = false;
             }
             else
             {
                 menu.enabled = false;
                 playerMovement.isInMenu = true;
                 inventory.enabled = true;
+                chatScript.enabled = true;
             }
         }
     }

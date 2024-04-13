@@ -12,8 +12,11 @@ public class MenuScript : MonoBehaviour
 
     private InventoryScript inventoryScript;
 
+    private ChatScript chatScript;
+
     private void Start()
     {
+        chatScript = FindObjectOfType<ChatScript>();
         playerMovement = FindObjectOfType<PlayerMovement>();
         menu = GameObject.Find("MenuUI").GetComponent<Canvas>();
         inventoryScript = FindObjectOfType<InventoryScript>();
@@ -29,12 +32,14 @@ public class MenuScript : MonoBehaviour
                 playerMovement.isInMenu = false;
                 menu.enabled = false;
                 inventoryScript.enabled = true;
+                chatScript.enabled = false;
             }
             else
             {
                 inventoryScript.enabled = false;
                 playerMovement.isInMenu = true;
                 menu.enabled = true;
+                chatScript.enabled = true;
             }
         }
     }

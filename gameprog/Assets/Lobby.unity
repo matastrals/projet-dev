@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 28672124}
   - component: {fileID: 28672123}
   m_Layer: 5
-  m_Name: ErrorMessageServ
+  m_Name: MessageServState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -157,8 +157,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.46429443, y: -1.7884521}
-  m_SizeDelta: {x: 379.44, y: 50}
+  m_AnchoredPosition: {x: 0.02, y: -1.7884521}
+  m_SizeDelta: {x: 322.4462, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &28672123
 MonoBehaviour:
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Server already started !
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -560,7 +560,7 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 842029363}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ServerScript, Assembly-CSharp
         m_MethodName: ServerIP
         m_Mode: 0
@@ -730,8 +730,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 842029363}
-        m_TargetAssemblyTypeName: ServerScript, Assembly-CSharp
-        m_MethodName: StartServer
+        m_TargetAssemblyTypeName: SetServerScript, Assembly-CSharp
+        m_MethodName: IsServerStart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1048,7 +1048,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   errorTextParentIp: {fileID: 1132161258}
-  errorTextParentServ: {fileID: 1322318482}
+  MessTextServStateParent: {fileID: 1322318482}
 --- !u!1 &865650125
 GameObject:
   m_ObjectHideFlags: 0
@@ -1833,7 +1833,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1322318483}
   m_Layer: 0
-  m_Name: ErrorMessageParentServ
+  m_Name: MessageServStateParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1867,7 +1867,7 @@ GameObject:
   - component: {fileID: 1360983513}
   - component: {fileID: 1360983512}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: HintMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
