@@ -22,6 +22,7 @@ public class ChatScript : MonoBehaviour
     private TcpClient client;
     private IPAddress clientAddress;
     private string textOnline;
+    private TcpClient server;
 
     private void Start()
     {
@@ -66,6 +67,7 @@ public class ChatScript : MonoBehaviour
             byte[] dataToSend = Encoding.ASCII.GetBytes(text);
             await stream.WriteAsync(dataToSend, 0, dataToSend.Length);
         }
+
         PrintOnChat(text);
     }
 
@@ -123,8 +125,24 @@ public class ChatScript : MonoBehaviour
         {
             listChat.RemoveAt(0);
         }
-        print(listChat);
         string stringChat = string.Join("\n", listChat);
         textChatLocal.text = stringChat;
+    }
+
+    public void ConnectToServer()
+    {
+        try
+        {
+            string serverIP = "10.33.72.75";
+            int port = 8080; 
+
+            server = new TcpClient(serverIP, port);
+
+            print("Connexion établie");
+        }
+        catch (Exception e)
+        {
+            print("Erreur: " + e.Message);
+        }
     }
 }
