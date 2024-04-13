@@ -33,8 +33,6 @@ public class ChatScript : MonoBehaviour
         playerMovement.isInMenu = false;
         inputChat.gameObject.SetActive(false);
         listChat = new List<string>();
-        menuScript.enabled = false;
-        inventoryScript.enabled= false;
         CLIENT = new Dictionary<string, TcpClient>();
     }
     void Update()
@@ -48,13 +46,13 @@ public class ChatScript : MonoBehaviour
                 inventoryScript.enabled = true;
                 inputChat.gameObject.SetActive(false);
                 inputChat.text = "";
-            } else
-            {
+           } else
+           {
                 menuScript.enabled = false;
                 inventoryScript.enabled = false;
                 playerMovement.isInMenu = true;
                 inputChat.gameObject.SetActive(true);
-            }
+           }
         }
     }
 

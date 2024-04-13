@@ -30,14 +30,14 @@ public class InventoryScript : MonoBehaviour
                 menu.enabled = true;
                 playerMovement.isInMenu = false;
                 inventory.enabled = false;
-                chatScript.enabled = false;
+                chatScript.enabled = true;
             }
             else
             {
                 menu.enabled = false;
                 playerMovement.isInMenu = true;
                 inventory.enabled = true;
-                chatScript.enabled = true;
+                chatScript.enabled = false;
             }
         }
     }
