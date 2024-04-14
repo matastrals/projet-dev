@@ -1,0 +1,201 @@
+/* style.css */
+
+/* Style pour la div d'accueil */
+.acceuil {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  /* Style pour le titre */
+  .acceuil h1 {
+    color: #333;
+  }
+  
+  /* Style pour le paragraphe */
+  .acceuil p {
+    color: #666;
+    font-size: 18px;
+  }
+  
+  /* Style pour les liens */
+  .acceuil a {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    width: 150px;
+  }
+  
+body {
+
+    background-color: rgb(246, 234, 218);
+}
+
+  /* Style pour la div de connexion */
+.connexion {
+    text-align: center;
+    margin-top: 50px;
+  }
+/* Style pour la div de connexion */
+.connexion {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  /* Style pour le titre */
+  .connexion h2 {
+    color: #333;
+  }
+  
+  /* Style pour le formulaire */
+  .connexion form {
+    display: inline-block;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  /* Style pour les champs de saisie */
+  .connexion input[type="text"],
+  .connexion input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+  }
+  
+  /* Style pour le bouton de soumission */
+  .connexion input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .connexion input[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+
+/* Style pour la div d'inscription */
+.inscription {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  /* Style pour le titre */
+  .inscription h2 {
+    color: #333;
+  }
+  
+  /* Style pour le formulaire */
+  .inscription form {
+    display: inline-block;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  /* Style pour les champs de saisie */
+  .inscription input[type="text"],
+  .inscription input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+  }
+  
+  /* Style pour le bouton de soumission */
+  .inscription input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .inscription input[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+
+/* Style pour le titre des récompenses */
+.rewards-container h2 {
+    color: #333;
+    text-align: center;
+}
+
+/* Style pour chaque récompense */
+.rewards-container form {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+/* Style pour le nom de la récompense */
+.rewards-container .reward-name {
+    font-weight: bold;
+}
+
+/* Style pour le montant de la récompense */
+.rewards-container .reward-amount {
+    color: #007bff;
+}
+
+/* Style pour le bouton de réclamation */
+.rewards-container .claim-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+/* Style pour le bouton de réclamation au survol */
+.rewards-container .claim-button:hover {
+    background-color: #0056b3;
+}
+
+/* Style pour le texte "Récompenses disponibles" */
+.rewards-container .rewards-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Style pour le texte "Aucune récompense disponible pour le moment." */
+.rewards-container .no-rewards {
+    font-style: italic;
+    color: #666;
+}
+
+.email {
+  font-style: italic;
+  color: #333; /* Couleur du texte */
+}
+
+/* Style pour la liste des articles récupérés */
+.articles-recuperes {
+  list-style-type: none; /* Supprime les puces */
+  padding-left: 0; /* Supprime le décalage à gauche */
+}
+
+.articles-recuperes li {
+  margin-bottom: 5px; /* Espacement entre les éléments de la liste */
+  background-color: #f9f9f9; /* Couleur de fond */
+  padding: 5px 10px; /* Espacement interne */
+  border-radius: 5px; /* Coins arrondis */
+}
+
+.articles-recuperes li:hover {
+  background-color: #e0e0e0; /* Couleur de fond au survol */
+}

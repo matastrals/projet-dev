@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  php:
+    build:
+      context: php/
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "80:80"
+    environment:
+      - DB_HOST=10.5.1.211
+      - DB_DATABASE=app_nulle
+      - DB_USERNAME=db1
+      - DB_PASSWORD=db1
