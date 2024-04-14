@@ -23,6 +23,8 @@ public class SetServerScript : MonoBehaviour
         MessTextServState = MessTextServStateParent.GetComponentInChildren<TMP_Text>();
         MessTextServState.gameObject.SetActive(false);
         PlayerPrefs.SetString("IsServerStart", "false");
+        PlayerPrefs.SetString("Ip server", "");
+        PlayerPrefs.Save();
     }
 
     

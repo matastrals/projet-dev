@@ -26,6 +26,8 @@ public class PlayerMovement : MonoBehaviour
 
     public bool isInMenu;
 
+    private int numberOfMoves = 0;
+
 
     void Start()
     {
@@ -50,6 +52,10 @@ public class PlayerMovement : MonoBehaviour
             rb.MovePosition(rb.position + dir * speed * Time.fixedDeltaTime);
             if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
             {
+                if (dir.magnitude > 0)
+                {
+                    numberOfMoves++;
+                }
                 if (dir.x > 0)
                 {
                     spriteRenderer.sprite = leftSprite;
@@ -73,5 +79,10 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+    }
+
+    public int GetNumberOfMoves()
+    {
+        return numberOfMoves;
     }
 }

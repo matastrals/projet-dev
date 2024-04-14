@@ -1,7 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using TMPro.EditorUtilities;
 using UnityEditor;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
+using UnityEngine.UIElements;
+using UnityEngine.WSA;
 
 public class InventoryScript : MonoBehaviour
 {
@@ -12,13 +18,28 @@ public class InventoryScript : MonoBehaviour
     private MenuScript menu;
 
     private ChatScript chatScript;
+
+    public GameObject panel;
+
+    private GameObject[] panelChild;
+
+    private ScoreManager scoreManagerScript;
     void Start()
     {
+        scoreManagerScript = FindAnyObjectByType<ScoreManager>();
         chatScript = FindObjectOfType<ChatScript>();
         playerMovement = FindObjectOfType<PlayerMovement>();
         inventory = GameObject.Find("Inventory").GetComponent<Canvas>();
         menu = FindObjectOfType<MenuScript>();
         inventory.enabled = false;
+
+        int childCount = panel.transform.childCount;
+        panelChild = new GameObject[childCount];
+        for (int i = 0; i < childCount; i++)
+        {
+            panelChild[i] = panel.transform.GetChild(i).gameObject;
+        }
+        GetItem();
     }
 
     void Update()
@@ -27,18 +48,46 @@ public class InventoryScript : MonoBehaviour
         {
             if (inventory.enabled)
             {
+                scoreManagerScript.enabled = true;
                 menu.enabled = true;
+                chatScript.enabled = true;
                 playerMovement.isInMenu = false;
                 inventory.enabled = false;
-                chatScript.enabled = true;
             }
             else
             {
+                scoreManagerScript.enabled = false;
                 menu.enabled = false;
+                chatScript.enabled = false;
                 playerMovement.isInMenu = true;
                 inventory.enabled = true;
-                chatScript.enabled = false;
             }
+        }
+    }
+
+    
+    private void GetItem()
+    {
+        string inventory = PlayerPrefs.GetString("Inventory");
+        if (inventory == "") {
+            return;
+        }
+        string[] inventoryParse = inventory.Split(",");
+        try
+        {
+            for (var i = 0; i < inventoryParse.Length; i++)
+            {
+                Texture2D image = new Texture2D(2, 2);
+                byte[] fileData = System.IO.File.ReadAllBytes("Assets/Ressources/" + inventoryParse[i] + ".png");
+                image.LoadImage(fileData);
+                Sprite sprite = Sprite.Create(image, new Rect(0, 0, image.width, image.height), Vector2.zero);
+                panelChild[i].gameObject.transform.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                panelChild[i].gameObject.transform.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+            }
+        }
+        catch (Exception e)
+        {
+            print(e.ToString());
         }
     }
 }

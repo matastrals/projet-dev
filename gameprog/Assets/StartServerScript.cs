@@ -6,12 +6,12 @@ using System.Net;
 using System.Text;
 using UnityEngine;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 public class StartServerScript : MonoBehaviour
 {
     private IPAddress ipAddress;
     public static TcpListener listener;
-    private string ip = "192.168.1.198";
     private ChatScript chatScript;
 
 
@@ -25,11 +25,15 @@ public class StartServerScript : MonoBehaviour
     }
     public async void StartServer()
     {
-        ipAddress = IPAddress.Parse(ip);
-        int port = 8080;
-        listener = new TcpListener(ipAddress, port);
+        string serverIpandPort = PlayerPrefs.GetString("Ip server");
+        Match regex = Regex.Match(serverIpandPort, @"(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):(?<port>\d+)");
+        string serverIP = regex.Groups["ip"].Value;
+        string port = regex.Groups["port"].Value;
+
+        ipAddress = IPAddress.Parse(serverIP);
+        listener = new TcpListener(ipAddress, int.Parse(port));
         listener.Start();
-        print($"Serveur démarré sur {ipAddress}:{port}");
+        print($"Serveur démarré sur {ipAddress}:{int.Parse(port)}");
         await chatScript.ClientConnect(listener);
     }
 }

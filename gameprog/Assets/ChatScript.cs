@@ -28,9 +28,11 @@ public class ChatScript : MonoBehaviour
     private IPAddress clientAddress;
     private TcpClient server;
     private string isServerStart;
+    private ScoreManager scoreManagerScript;
 
     private void Start()
     {
+        scoreManagerScript = FindAnyObjectByType<ScoreManager>();
         serverScript = FindAnyObjectByType<StartServerScript>();
         menuScript = FindObjectOfType<MenuScript>();
         inventoryScript = FindObjectOfType<InventoryScript>();
@@ -53,14 +55,16 @@ public class ChatScript : MonoBehaviour
         {
             if (inputChat.gameObject.activeSelf)
             {
-                playerMovement.isInMenu = false;
+                scoreManagerScript.enabled= true;
                 menuScript.enabled = true;
                 inventoryScript.enabled = true;
+                playerMovement.isInMenu = false;
                 inputChat.gameObject.SetActive(false);
                 inputChat.text = "";
             }
             else
             {
+                scoreManagerScript.enabled = false;
                 menuScript.enabled = false;
                 inventoryScript.enabled = false;
                 playerMovement.isInMenu = true;
