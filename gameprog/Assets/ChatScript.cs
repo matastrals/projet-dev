@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TMPro;
+using UnityEditor.PackageManager;
+using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ChatScript : MonoBehaviour
 {
@@ -21,8 +26,8 @@ public class ChatScript : MonoBehaviour
     private StartServerScript serverScript;
     private TcpClient client;
     private IPAddress clientAddress;
-    private string textOnline;
     private TcpClient server;
+    private string isServerStart;
 
     private void Start()
     {
@@ -34,41 +39,40 @@ public class ChatScript : MonoBehaviour
         inputChat.gameObject.SetActive(false);
         listChat = new List<string>();
         CLIENT = new Dictionary<string, TcpClient>();
+        isServerStart = PlayerPrefs.GetString("IsServerStart");
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+
+        if (isServerStart == "false" & PlayerPrefs.GetString("Ip server") != "")
+        {
+            ConnectToServer();
+        }
     }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-           if (inputChat.gameObject.activeSelf)
-           {
+            if (inputChat.gameObject.activeSelf)
+            {
                 playerMovement.isInMenu = false;
                 menuScript.enabled = true;
                 inventoryScript.enabled = true;
                 inputChat.gameObject.SetActive(false);
                 inputChat.text = "";
-           } else
-           {
+            }
+            else
+            {
                 menuScript.enabled = false;
                 inventoryScript.enabled = false;
                 playerMovement.isInMenu = true;
                 inputChat.gameObject.SetActive(true);
-           }
+            }
         }
     }
 
-    public async void ChatLocal(string text)
-    {
-        
-        if (PlayerPrefs.GetString("IsServerStart") == "true" & CLIENT.Count != 0)
-        {
-            NetworkStream stream = client.GetStream();
-            byte[] dataToSend = Encoding.ASCII.GetBytes(text);
-            await stream.WriteAsync(dataToSend, 0, dataToSend.Length);
-        }
 
-        PrintOnChat(text);
-    }
+    // CODE SERVEUR
 
+    // Code connect client
     public async Task ClientConnect(TcpListener listener)
     {
         while (true)
@@ -80,67 +84,247 @@ public class ChatScript : MonoBehaviour
                 clientAddress = ((IPEndPoint)client.Client.RemoteEndPoint).Address;
                 CLIENT.Add(clientAddress.ToString(), client);
                 print($"Client {clientAddress} connecté !");
-                Task.Run(async () => await ChatOnline(client));
+                ServerSendMessageAll(clientAddress.ToString(), true);
+                Task.Run(async () => await ServerReceiveMessage());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 print(ex.ToString());
             }
         }
     }
 
-    public async Task ChatOnline(TcpClient client)
+
+    // Code receive message
+    public async Task ServerReceiveMessage()
     {
+        
+        while (true)
+        {
+            try
+            { 
+                NetworkStream stream = client.GetStream();
+                string clientIP = ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString();
+
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                string textToReceive = "";
+
+                if (isServerStart == "true" & CLIENT.Count != 0)
+                {
+                    while (true)
+                    {
+                        bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                        textToReceive = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                        print($"Message reçu du client ({((IPEndPoint)client.Client.RemoteEndPoint).Address}): {textToReceive}");
+                        break;
+                    }
+                }
+
+                if (textToReceive == "")
+                {
+                    textToReceive = ($"{((IPEndPoint)client.Client.RemoteEndPoint).Address} c'est déconnecté");
+                    CLIENT.Remove(clientIP);
+                    ServerSendMessage(textToReceive, client, true);
+                    stream.Close();
+                    client.Close();
+                    break;
+                }
+                ServerSendMessage(textToReceive, client);     
+            }
+            catch (Exception e)
+            {
+                print(e.Message);
+            }
+        }
+        
+    }
+
+    // Code send message at all client
+    public async void ServerSendMessageAll(string text, bool isNewClient = false)
+    {
+        if (client == null | text.Length >= 50)
+        {
+            return;
+        }
+
         NetworkStream stream = client.GetStream();
 
-        byte[] buffer = new byte[1024];
-        int bytesRead;
+        string textToSend = text;
 
-        while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+        if (isNewClient)
         {
-            textOnline = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-            print($"Message reçu du client ({((IPEndPoint)client.Client.RemoteEndPoint).Address}): {textOnline}");
-
-            byte[] dataToSend = Encoding.ASCII.GetBytes($"Message reçu : {textOnline}");
-            await stream.WriteAsync(dataToSend, 0, dataToSend.Length);
+            textToSend = $"{text} est maintenant connecté !";
+        } else
+        {
+            textToSend = $"{((IPEndPoint)client.Client.RemoteEndPoint).Address} " + text;
         }
-        print($"Message du client (pour etre sur) {textOnline}");
-        PrintOnChat(textOnline);
+
+        if (isServerStart == "true" & CLIENT.Count != 0)
+        {
+
+            foreach (var clients in CLIENT)
+            {
+                byte[] dataToSend = Encoding.ASCII.GetBytes(textToSend);
+                await stream.WriteAsync(dataToSend, 0, dataToSend.Length);
+            }
+        }
+        UnityMainThreadDispatcher.Enqueue(() => {
+            PrintOnChat(textToSend);
+        });
     }
 
-    private void PrintOnChat(string text)
+
+    // Code send message at all client without sender
+    public async void ServerSendMessage(string text, TcpClient sender, bool isClientDeco = false)
     {
-        if (Regex.IsMatch(text, @"^\s*$"))
+        if (client == null && !isClientDeco)
         {
             return;
         }
-        if (text.Length >= 50)
+
+        string textToSend = $"{((IPEndPoint)client.Client.RemoteEndPoint).Address} " + text;;
+        if (isServerStart == "true" & CLIENT.Count != 0)
         {
-            return;
+            foreach (var clients in CLIENT)
+            {
+                TcpClient eachClient = CLIENT[clients.Key];
+                NetworkStream stream = eachClient.GetStream();
+
+                if (eachClient == sender)
+                {
+                    continue;
+                }
+
+
+                byte[] dataToSend = Encoding.ASCII.GetBytes(textToSend);
+                await stream.WriteAsync(dataToSend, 0, dataToSend.Length);
+            }
         }
-        listChat.Insert(listChat.Count, text);
-        if (listChat.Count > tailleList)
-        {
-            listChat.RemoveAt(0);
-        }
-        string stringChat = string.Join("\n", listChat);
-        textChatLocal.text = stringChat;
+        UnityMainThreadDispatcher.Enqueue(() => {
+            PrintOnChat(textToSend);
+        });
     }
 
+
+    // CODE CLIENT
+
+    // Code connection serveur
     public void ConnectToServer()
     {
         try
         {
-            string serverIP = "10.33.72.75";
-            int port = 8080; 
+            string serverIpandPort = PlayerPrefs.GetString("Ip server");
+            Match regex = Regex.Match(serverIpandPort, @"(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):(?<port>\d+)");
 
-            server = new TcpClient(serverIP, port);
+            string serverIP = regex.Groups["ip"].Value;
+            string port = regex.Groups["port"].Value;
 
+            server = new TcpClient(serverIP, int.Parse(port));
             print("Connexion établie");
+            ClientReceiveMessage();
         }
         catch (Exception e)
         {
             print("Erreur: " + e.Message);
         }
     }
+
+
+    // Code receive message
+    public async void ClientReceiveMessage()
+    {
+
+        if (server == null)
+        {
+            return;
+        }
+        NetworkStream stream = server.GetStream();
+
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        string textReceive = "";
+
+        while (true)
+        {
+            bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+            textReceive = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+            print($"Message recu : {textReceive}");
+            break;
+        }
+        PrintOnChat(textReceive);
+    }
+
+
+
+    // Code send message
+    public async void ClientSendMessage(string textToSend)
+    {
+        if (server == null | textToSend.Length >= 50)
+        {
+            return;
+        }
+        NetworkStream stream = server.GetStream();
+
+        while (true)
+        {
+            byte[] dataToSend = Encoding.ASCII.GetBytes(textToSend);
+            await stream.WriteAsync(dataToSend, 0, dataToSend.Length);
+            break;
+        }
+        PrintOnChat(textToSend);
+    }
+
+
+    public void OnApplicationQuit()
+    {
+        if (isServerStart == "false")
+        {
+            server.GetStream().Close();
+            server.Close();
+        }
+    }
+
+
+    public void OnSceneUnloaded(Scene scene)
+    {
+        if (scene == SceneManager.GetActiveScene() & isServerStart == "false")
+        {
+            ClientSendMessage("");
+            server.GetStream().Close();
+            server.Close();
+        }
+    }
+
+
+    // CODE LOCAL
+
+    // Code print message
+    private void PrintOnChat(string text)
+    {
+        try
+        {
+            if (Regex.IsMatch(text, @"^\s*$"))
+            {
+                return;
+            }
+            if (text.Length >= 50)
+            {
+                return;
+            }
+            listChat.Insert(listChat.Count, text);
+            if (listChat.Count > tailleList)
+            {
+                listChat.RemoveAt(0);
+            }
+            string stringChat = string.Join("\n", listChat);
+            textChatLocal.text = stringChat;
+        }
+        catch (Exception e)
+        {
+            print($"Erreur de print (PrintOnChat) {e.Message}");
+        }
+    }
+
+
 }

@@ -8,6 +8,7 @@ using TMPro;
 using System.Text;
 using System;
 
+
 public class SetServerScript : MonoBehaviour
 {
     public GameObject errorTextParentIp;

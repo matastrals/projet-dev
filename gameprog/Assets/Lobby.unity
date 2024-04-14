@@ -560,8 +560,8 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ServerScript, Assembly-CSharp
+      - m_Target: {fileID: 842029363}
+        m_TargetAssemblyTypeName: SetServerScript, Assembly-CSharp
         m_MethodName: ServerIP
         m_Mode: 0
         m_Arguments:

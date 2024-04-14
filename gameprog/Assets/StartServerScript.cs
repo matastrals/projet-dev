@@ -11,8 +11,8 @@ public class StartServerScript : MonoBehaviour
 {
     private IPAddress ipAddress;
     public static TcpListener listener;
-    private string ip = "10.33.72.75";
-    public ChatScript chatScript;
+    private string ip = "192.168.1.198";
+    private ChatScript chatScript;
 
 
     private void Start()

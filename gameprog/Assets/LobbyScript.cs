@@ -10,13 +10,6 @@ using System;
 
 public class LobbyScript : MonoBehaviour
 {
-
-
-    void Start()
-    {
-
-    }
-
     public void Play()
     {
         SceneManager.LoadScene("Project");
