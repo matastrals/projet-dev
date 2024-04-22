@@ -978,7 +978,7 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1941530730}
+      - m_Target: {fileID: 1941530732}
         m_TargetAssemblyTypeName: ChatScript, Assembly-CSharp
         m_MethodName: ClientSendMessage
         m_Mode: 0
@@ -990,7 +990,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1941530730}
+      - m_Target: {fileID: 1941530732}
         m_TargetAssemblyTypeName: ChatScript, Assembly-CSharp
         m_MethodName: ServerSendMessageAll
         m_Mode: 0
@@ -1371,6 +1371,7 @@ MonoBehaviour:
   leftSprite: {fileID: -8231525506301192201, guid: 106dc2a4656ddf74eb2dde2d94ccb8da,
     type: 3}
   isInMenu: 0
+  playerCamera: {fileID: 0}
 --- !u!61 &942074988
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2799,8 +2800,8 @@ GameObject:
   - component: {fileID: 1941530727}
   - component: {fileID: 1941530726}
   - component: {fileID: 1941530725}
-  - component: {fileID: 1941530730}
   - component: {fileID: 1941530731}
+  - component: {fileID: 1941530732}
   m_Layer: 5
   m_Name: ChatUI
   m_TagString: Untagged
@@ -2904,7 +2905,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1941530730
+--- !u!114 &1941530731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941530724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a99fa20045eb747a6800fce89efcfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1941530732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2918,18 +2931,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputChat: {fileID: 755656383}
   textChatLocal: {fileID: 347102425}
---- !u!114 &1941530731
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1941530724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66a99fa20045eb747a6800fce89efcfb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1955512020
 GameObject:
   m_ObjectHideFlags: 0

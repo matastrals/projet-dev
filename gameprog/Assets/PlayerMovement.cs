@@ -28,6 +28,8 @@ public class PlayerMovement : MonoBehaviour
 
     private int numberOfMoves = 0;
 
+    public Camera playerCamera;
+
 
     void Start()
     {

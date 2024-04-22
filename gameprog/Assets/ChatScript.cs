@@ -30,7 +30,7 @@ public class ChatScript : MonoBehaviour
     private string isServerStart;
     private ScoreManager scoreManagerScript;
 
-    private void Start()
+    void Start()
     {
         scoreManagerScript = FindAnyObjectByType<ScoreManager>();
         serverScript = FindAnyObjectByType<StartServerScript>();
@@ -88,7 +88,7 @@ public class ChatScript : MonoBehaviour
                 clientAddress = ((IPEndPoint)client.Client.RemoteEndPoint).Address;
                 CLIENT.Add(clientAddress.ToString(), client);
                 print($"Client {clientAddress} connecté !");
-                ServerSendMessageAll(clientAddress.ToString(), true);
+                ServerSendMessageUserConnected(clientAddress.ToString());
                 Task.Run(async () => await ServerReceiveMessage());
             }
             catch (Exception ex)
@@ -98,7 +98,7 @@ public class ChatScript : MonoBehaviour
         }
     }
 
-
+         
     // Code receive message
     public async Task ServerReceiveMessage()
     {
@@ -129,12 +129,13 @@ public class ChatScript : MonoBehaviour
                 {
                     textToReceive = ($"{((IPEndPoint)client.Client.RemoteEndPoint).Address} c'est déconnecté");
                     CLIENT.Remove(clientIP);
-                    ServerSendMessage(textToReceive, client, true);
+                    ServerSendMessageUserDisconnected(textToReceive);
                     stream.Close();
                     client.Close();
                     break;
                 }
-                ServerSendMessage(textToReceive, client);     
+                print($"Message client : {textToReceive}");
+                ServerSendMessage(textToReceive);     
             }
             catch (Exception e)
             {
@@ -144,28 +145,20 @@ public class ChatScript : MonoBehaviour
         
     }
 
-    // Code send message at all client
-    public async void ServerSendMessageAll(string text, bool isNewClient = false)
-    {
-        if (client == null | text.Length >= 50)
-        {
-            return;
-        }
 
+    // Code send message when new client is connected
+    public async void ServerSendMessageUserConnected(string text)
+    {
+        print($"ServerSendMessageUserConnected");
         NetworkStream stream = client.GetStream();
 
-        string textToSend = text;
+        string textToSend;
 
-        if (isNewClient)
-        {
-            textToSend = $"{text} est maintenant connecté !";
-        } else
-        {
-            textToSend = $"{((IPEndPoint)client.Client.RemoteEndPoint).Address} " + text;
-        }
+        textToSend = $"{text} est maintenant connecté !";
 
         if (isServerStart == "true" & CLIENT.Count != 0)
         {
+            print($"Serveur allumé et CLIENT != 0");
 
             foreach (var clients in CLIENT)
             {
@@ -173,16 +166,83 @@ public class ChatScript : MonoBehaviour
                 await stream.WriteAsync(dataToSend, 0, dataToSend.Length);
             }
         }
+
         UnityMainThreadDispatcher.Enqueue(() => {
             PrintOnChat(textToSend);
         });
     }
 
 
-    // Code send message at all client without sender
-    public async void ServerSendMessage(string text, TcpClient sender, bool isClientDeco = false)
+
+    // Code send message when client is disconnected
+    public async void ServerSendMessageUserDisconnected(string text)
     {
-        if (client == null && !isClientDeco)
+
+        print($"ServerSendMessageUserDisconnected");
+        if (client == null)
+        {
+            print($"Client == null");
+            return;
+        }
+
+        NetworkStream stream = client.GetStream();
+
+        string textToSend = text;
+
+        textToSend = $"{((IPEndPoint)client.Client.RemoteEndPoint).Address} " + text;
+
+        if (isServerStart == "true" & CLIENT.Count != 0)
+        {
+            print($"Serveur allumé et CLIENT != 0");
+
+            foreach (var clients in CLIENT)
+            {
+                byte[] dataToSend = Encoding.ASCII.GetBytes(textToSend);
+                await stream.WriteAsync(dataToSend, 0, dataToSend.Length);
+            }
+        }
+        print($"{textToSend}");
+        UnityMainThreadDispatcher.Enqueue(() => {
+            PrintOnChat(textToSend);
+        });
+    }
+
+
+    // Code send message at all client
+    public async void ServerSendMessageAll(string text)
+    {
+        if (client == null | text.Length >= 50)
+        {
+            print($"Client == null");
+            return;
+        }
+
+        NetworkStream stream = client.GetStream();
+
+        string textToSend;
+
+        textToSend = $"{((IPEndPoint)client.Client.RemoteEndPoint).Address} {text} ";
+
+        if (isServerStart == "true" & CLIENT.Count != 0)
+        {
+            print($"Serveur allumé et CLIENT != 0");
+
+            foreach (var clients in CLIENT)
+            {
+                byte[] dataToSend = Encoding.ASCII.GetBytes(textToSend);
+                await stream.WriteAsync(dataToSend, 0, dataToSend.Length);
+            }
+        }
+        print($"Message a envoyé : {textToSend}");
+        UnityMainThreadDispatcher.Enqueue(() => {
+            PrintOnChat(textToSend);
+        });
+    }
+
+    // Code send message at all client without sender
+    public async void ServerSendMessage(string text)
+    {
+        if (client == null)
         {
             return;
         }
@@ -194,11 +254,6 @@ public class ChatScript : MonoBehaviour
             {
                 TcpClient eachClient = CLIENT[clients.Key];
                 NetworkStream stream = eachClient.GetStream();
-
-                if (eachClient == sender)
-                {
-                    continue;
-                }
 
 
                 byte[] dataToSend = Encoding.ASCII.GetBytes(textToSend);
@@ -238,25 +293,27 @@ public class ChatScript : MonoBehaviour
     // Code receive message
     public async void ClientReceiveMessage()
     {
-
         if (server == null)
         {
             return;
         }
-        NetworkStream stream = server.GetStream();
-
-        byte[] buffer = new byte[1024];
-        int bytesRead;
-        string textReceive = "";
-
         while (true)
         {
-            bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-            textReceive = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-            print($"Message recu : {textReceive}");
-            break;
-        }
-        PrintOnChat(textReceive);
+            NetworkStream stream = server.GetStream();
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            string textReceive = "";
+
+            while (true)
+            {
+                bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                textReceive = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                print($"Message recu : {textReceive}");
+                break;
+            }
+            PrintOnChat(textReceive);
+        }  
     }
 
 
@@ -306,6 +363,7 @@ public class ChatScript : MonoBehaviour
     // Code print message
     private void PrintOnChat(string text)
     {
+        print("PrintOnChat");
         try
         {
             if (Regex.IsMatch(text, @"^\s*$"))
