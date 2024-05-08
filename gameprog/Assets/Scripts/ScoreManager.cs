@@ -10,7 +10,6 @@ public class ScoreManager : MonoBehaviour
     public TMP_Text scoreText;
     public PlayerMovement playerMovement;
     private string playerName;
-    private ChatScript chatScript;
     private MenuScript menuScript;
     private InventoryScript inventoryScript;
     private Canvas scoreManager;
@@ -19,7 +18,6 @@ public class ScoreManager : MonoBehaviour
     {
         menuScript = FindObjectOfType<MenuScript>();
         inventoryScript = FindObjectOfType<InventoryScript>();
-        chatScript = FindObjectOfType<ChatScript>();
         playerName = PlayerPrefs.GetString("PlayerName");
         scoreManager = GameObject.Find("ScoreUI").GetComponent<Canvas>();
         scoreManager.enabled = false;
@@ -33,7 +31,6 @@ public class ScoreManager : MonoBehaviour
                 playerMovement.isInMenu = false;
                 menuScript.enabled = true;
                 inventoryScript.enabled = true;
-                chatScript.enabled = true;
             }
             else
             {
@@ -41,7 +38,6 @@ public class ScoreManager : MonoBehaviour
                 playerMovement.isInMenu = true;
                 menuScript.enabled = false;
                 inventoryScript.enabled = false;
-                chatScript.enabled = false;
             }
         }       
  

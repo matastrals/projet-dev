@@ -17,8 +17,6 @@ public class InventoryScript : MonoBehaviour
 
     private MenuScript menu;
 
-    private ChatScript chatScript;
-
     public GameObject panel;
 
     private GameObject[] panelChild;
@@ -27,7 +25,6 @@ public class InventoryScript : MonoBehaviour
     void Start()
     {
         scoreManagerScript = FindAnyObjectByType<ScoreManager>();
-        chatScript = FindObjectOfType<ChatScript>();
         playerMovement = FindObjectOfType<PlayerMovement>();
         inventory = GameObject.Find("Inventory").GetComponent<Canvas>();
         menu = FindObjectOfType<MenuScript>();
@@ -50,7 +47,6 @@ public class InventoryScript : MonoBehaviour
             {
                 scoreManagerScript.enabled = true;
                 menu.enabled = true;
-                chatScript.enabled = true;
                 playerMovement.isInMenu = false;
                 inventory.enabled = false;
             }
@@ -58,7 +54,6 @@ public class InventoryScript : MonoBehaviour
             {
                 scoreManagerScript.enabled = false;
                 menu.enabled = false;
-                chatScript.enabled = false;
                 playerMovement.isInMenu = true;
                 inventory.enabled = true;
             }

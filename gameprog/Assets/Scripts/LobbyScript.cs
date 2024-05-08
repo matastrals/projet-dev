@@ -24,14 +24,8 @@ public class LobbyScript : MonoBehaviour
     }
     public void Play()
     {
-        if (PlayerPrefs.GetString("IsServerStart") == "false" && PlayerPrefs.GetString("Ip server") == "")
-        {
-            errorBegin.text = "You need to host or to join a party";
-            errorBegin.color= Color.red;
-            errorBegin.gameObject.SetActive(true);
-            StartCoroutine(ErrorBegin());
-            return;
-        } else if (PlayerPrefs.GetString("PlayerName") == "")    
+        string playerName = PlayerPrefs.GetString("PlayerName");
+        if (string.IsNullOrWhiteSpace(playerName))    
         {
             errorBegin.text = "You need to put your player name";
             errorBegin.color = Color.red;
