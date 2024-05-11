@@ -99,6 +99,14 @@ public class TestServer : MonoBehaviour
                 }
             }
         }
+
+        for (int i = 0; i < disconnectList.Count - 1; i++)
+        {
+            Broadcast(disconnectList[i].clientName + " has disconnected", clients);
+
+            clients.Remove(disconnectList[i]);
+            disconnectList.RemoveAt(i);
+        }
     }
 
     private void StartListening()
@@ -189,6 +197,7 @@ public class TestServer : MonoBehaviour
     {
         return isServer;
     }
+
 }
 
 public class ServerClient

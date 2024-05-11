@@ -84,4 +84,24 @@ public class TestClient : MonoBehaviour
     {
         return(allMessage);
     }
+
+    private void CloseSocket()
+    {
+        if (!socketReady) return;
+        writer.Close();
+        reader.Close();
+        socket.Close();
+        socketReady = false;
+    }
+
+    private void OnApplicationQuit()
+    {
+        CloseSocket();
+    }
+
+    private void OnDisable()
+    {
+        CloseSocket();
+    }
+
 }
