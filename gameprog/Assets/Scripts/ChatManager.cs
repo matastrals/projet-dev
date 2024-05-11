@@ -27,7 +27,7 @@ public class ChatManager : MonoBehaviour
             allMessage = testServer.GetAllMessage();
         } else
         {
-            allMessage = new List<string>();
+            allMessage = testClient.GetAllMessage();
         }
         
         if (Input.GetKeyDown(KeyCode.Return))
@@ -61,11 +61,6 @@ public class ChatManager : MonoBehaviour
             message += $"{text}\n";
         }
         chatText.text = message;
-    }
-
-    public void SetAllMessage(string text)
-    {
-        allMessage.Add(text);
     }
 
 }

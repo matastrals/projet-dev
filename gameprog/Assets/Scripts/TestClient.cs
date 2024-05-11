@@ -16,10 +16,12 @@ public class TestClient : MonoBehaviour
     private StreamWriter writer;
     private StreamReader reader;
     private ChatManager chatManager;
+    private List<string> allMessage;
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
         chatManager = FindAnyObjectByType<ChatManager>();
+        allMessage = new List<string>();
     }
 
     public void ConnectToServer()
@@ -61,7 +63,7 @@ public class TestClient : MonoBehaviour
 
     private void OnIncomingData(string data)
     {
-        chatManager.SetAllMessage(data);
+        allMessage.Add(data);
     }
 
     public void Send(string data)
@@ -72,5 +74,8 @@ public class TestClient : MonoBehaviour
         writer.Flush();
     }
 
-
+    public List<string> GetAllMessage()
+    {
+        return(allMessage);
+    }
 }
