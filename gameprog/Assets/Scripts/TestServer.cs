@@ -9,26 +9,33 @@ using System.IO;
 using Unity.VisualScripting;
 using System.Runtime.CompilerServices;
 using TMPro;
+using JetBrains.Annotations;
 
 public class TestServer : MonoBehaviour
 {
     private List<ServerClient> clients;
     private List<ServerClient> disconnectList;
 
+    private List<string> allMessage;
     private int port;
     private TcpListener server;
     private bool serverStarted;
     public GameObject ErrorBeginNoIpOrPortParent;
     private TMP_Text ErrorBeginNoIpOrPort;
+    private string serverName;
+    private bool isServer = false;
 
 
     private void Start()
     {
         ErrorBeginNoIpOrPort = ErrorBeginNoIpOrPortParent.GetComponentInChildren<TMP_Text>();
         ErrorBeginNoIpOrPort.gameObject.SetActive(false);
+        allMessage = new List<string>();
+        serverName = PlayerPrefs.GetString("PlayerName");
     }
     public void StartServer()
     {
+        isServer = true;
         DontDestroyOnLoad(this.gameObject);
         string ip = PlayerPrefs.GetString("Ip");
         int.TryParse(PlayerPrefs.GetString("Port"), out port);
@@ -87,7 +94,7 @@ public class TestServer : MonoBehaviour
 
                     if (data != null)
                     {
-                        OnIncomingData(c, data);
+                        OnIncomingData(data, c);
                     }
                 }
             }
@@ -96,7 +103,7 @@ public class TestServer : MonoBehaviour
 
     private void StartListening()
     {
-        server.BeginAcceptTcpClient(AcceotTcoCkient, server);
+        server.BeginAcceptTcpClient(AcceotTcpClient, server);
     }
 
     private bool IsConnected(TcpClient c)
@@ -122,23 +129,31 @@ public class TestServer : MonoBehaviour
         }
     }
 
-    private void AcceotTcoCkient(IAsyncResult ar)
+    private void AcceotTcpClient(IAsyncResult ar)
     {
         TcpListener listener = (TcpListener)ar.AsyncState;
 
         clients.Add(new ServerClient(listener.EndAcceptTcpClient(ar)));
         StartListening();
 
-        Broadcast(clients[clients.Count- 1].clientName + " has connected", clients);
+        
     }
 
-    private void OnIncomingData(ServerClient c, string data)
+    private void OnIncomingData(string data, ServerClient c)
     {
-        Broadcast(data, clients);
+        if (string.IsNullOrEmpty(c.clientName))
+        {
+            c.clientName = data;
+            Broadcast("Server : " + clients[clients.Count - 1].clientName + " has connected", clients);
+        } else
+        {
+            Broadcast(data, clients);
+        }
     }
 
-    private void Broadcast(string data, List<ServerClient> cl )
+    private void Broadcast(string data, List<ServerClient> cl)
     {
+        SetAllMessage(data);
         foreach (ServerClient c in cl)
         {
             try
@@ -153,6 +168,27 @@ public class TestServer : MonoBehaviour
             }
         }
     }
+
+    public void Send(string message)
+    {
+        string messageToSend = $"{serverName} : {message}";
+        Broadcast(messageToSend, clients);
+    }
+
+    private void SetAllMessage(string message)
+    {
+        allMessage.Add(message);
+    }
+
+    public List<string> GetAllMessage()
+    {
+        return allMessage;
+    }
+
+    public bool GetIsServer()
+    {
+        return isServer;
+    }
 }
 
 public class ServerClient
@@ -162,7 +198,7 @@ public class ServerClient
 
     public ServerClient(TcpClient clientSocket)
     {
-        clientName = "Guest";
+        clientName = "";
         tcp = clientSocket;
     }
 }

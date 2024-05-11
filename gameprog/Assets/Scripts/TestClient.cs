@@ -15,10 +15,11 @@ public class TestClient : MonoBehaviour
     private NetworkStream stream;
     private StreamWriter writer;
     private StreamReader reader;
-
+    private ChatManager chatManager;
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
+        chatManager = FindAnyObjectByType<ChatManager>();
     }
 
     public void ConnectToServer()
@@ -60,7 +61,7 @@ public class TestClient : MonoBehaviour
 
     private void OnIncomingData(string data)
     {
-        Debug.Log("Server : " + data);
+        chatManager.SetAllMessage(data);
     }
 
     public void Send(string data)
