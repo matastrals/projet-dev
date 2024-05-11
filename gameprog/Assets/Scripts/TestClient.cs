@@ -20,7 +20,6 @@ public class TestClient : MonoBehaviour
     private string username;
     private void Start()
     {
-        DontDestroyOnLoad(this.gameObject);
         chatManager = FindAnyObjectByType<ChatManager>();
         allMessage = new List<string>();
         username = PlayerPrefs.GetString("PlayerName");
@@ -28,7 +27,8 @@ public class TestClient : MonoBehaviour
 
     public void ConnectToServer()
     {
-       if(socketReady) return;
+        DontDestroyOnLoad(this.gameObject);
+        if (socketReady) return;
 
         string host = PlayerPrefs.GetString("Ip");
         int port;
