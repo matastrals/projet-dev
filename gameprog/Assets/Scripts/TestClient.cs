@@ -17,11 +17,13 @@ public class TestClient : MonoBehaviour
     private StreamReader reader;
     private ChatManager chatManager;
     private List<string> allMessage;
+    private string username;
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
         chatManager = FindAnyObjectByType<ChatManager>();
         allMessage = new List<string>();
+        username = PlayerPrefs.GetString("PlayerName");
     }
 
     public void ConnectToServer()
@@ -39,6 +41,7 @@ public class TestClient : MonoBehaviour
             writer = new StreamWriter(stream);
             reader = new StreamReader(stream);
             socketReady = true;
+            Send(username);
         }
         catch (Exception e)
         {
