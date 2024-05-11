@@ -72,7 +72,8 @@ public class TestClient : MonoBehaviour
     public void Send(string data)
     {
         if (!socketReady) return;
-        
+
+        data = $"{username} : {data}";
         writer.WriteLine(data);
         writer.Flush();
     }
