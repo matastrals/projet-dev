@@ -6,7 +6,6 @@ using UnityEngine;
 using System.Net;
 using System;
 using UnityEngine.Rendering;
-using UnityEditor.Experimental.GraphView;
 
 public class TestClient : MonoBehaviour
 {
@@ -33,7 +32,7 @@ public class TestClient : MonoBehaviour
         string host = PlayerPrefs.GetString("Ip");
         int port;
         int.TryParse(PlayerPrefs.GetString("Port"), out port);
-
+        username = PlayerPrefs.GetString("PlayerName");
         try
         {
             socket = new TcpClient(host, port);
