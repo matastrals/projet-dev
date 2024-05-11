@@ -41,7 +41,10 @@ public class TestClient : MonoBehaviour
             writer = new StreamWriter(stream);
             reader = new StreamReader(stream);
             socketReady = true;
-            Send(username);
+            if (!socketReady) return;
+
+            writer.WriteLine(username);
+            writer.Flush();
         }
         catch (Exception e)
         {
