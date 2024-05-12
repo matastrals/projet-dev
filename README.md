@@ -51,3 +51,7 @@ i : Ouvre l'inventaire
 Entrée : Ouvre le chat
 Échap : Ouvre le menu
 Tab : Ouvre le tableau de score
+
+## Erreur
+Si vous rencontrez le moindre problème n'hésitez pas à nous contacter.
+Seul les bottes et l'épée fonctionne dans les items, le 3e à un problème d'affichage.
