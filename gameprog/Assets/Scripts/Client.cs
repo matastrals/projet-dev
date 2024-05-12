@@ -7,7 +7,7 @@ using System.Net;
 using System;
 using UnityEngine.Rendering;
 
-public class TestClient : MonoBehaviour
+public class Client : MonoBehaviour
 {
     private bool socketReady;
     private TcpClient socket;

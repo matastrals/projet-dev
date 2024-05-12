@@ -3,53 +3,81 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
+using System;
+using Unity.VisualScripting;
 
 public class ChatManager : MonoBehaviour
 {
     private List<string> allMessage;
-    private TestServer testServer;
-    private TestClient testClient;
+    private Server server;
+    private Client client;
     public TMP_InputField inputField;
     public TMP_Text chatText;
     private bool isServer;
 
+    private PlayerMovement pm;
+    private InventoryScript inventorySc;
+    private MenuScript menuSc;
+    private ScoreManager scoreManager;
+
     private void Start()
     {
-        testServer = FindAnyObjectByType<TestServer>();
-        testClient = FindAnyObjectByType<TestClient>();
-        isServer = testServer.GetIsServer();
+        pm = FindAnyObjectByType<PlayerMovement>();
+        inventorySc = FindAnyObjectByType<InventoryScript>();
+        menuSc = FindAnyObjectByType<MenuScript>();
+        scoreManager = FindAnyObjectByType<ScoreManager>();
+        inputField.gameObject.SetActive(false);
+        try
+        {
+            server = FindAnyObjectByType<Server>();
+            client = FindAnyObjectByType<Client>();
+            isServer = server.GetIsServer();
+        }
+        catch
+        {
+            gameObject.SetActive(false);
+        }
+        
     }
 
     private void Update()
     {
         if (isServer)
         {
-            allMessage = testServer.GetAllMessage();
-        } else
-        {
-            allMessage = testClient.GetAllMessage();
+            allMessage = server.GetAllMessage();
         }
-        
+        else
+        {
+            allMessage = client.GetAllMessage();
+        }
+
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            if (!inputField.isFocused && inputField.text == "")
+            if (!inputField.IsActive() && inputField.text == "")
             {
+                DisableOtherUI();
                 inputField.ActivateInputField();
+            }
+            else if (inputField.text == "")
+            {
+                EnableOtherUI();
             }
             else
             {
+                EnableOtherUI();
                 string text = inputField.text;
                 inputField.text = "";
                 if (isServer)
                 {
-                    testServer.Send(text);
-                } else
-                {
-                    testClient.Send(text);
+                    server.Send(text);
                 }
-                
+                else
+                {
+                    client.Send(text);
+                }
+
             }
-        } 
+        }
         SetChat();
     }
 
@@ -63,4 +91,21 @@ public class ChatManager : MonoBehaviour
         chatText.text = message;
     }
 
+    private void EnableOtherUI()
+    {
+        pm.enabled = true;
+        inventorySc.enabled = true;
+        menuSc.enabled = true;
+        scoreManager.enabled = true;
+        inputField.gameObject.SetActive(false);
+    }
+
+    private void DisableOtherUI()
+    {
+        pm.enabled = false;
+        inventorySc.enabled = false;
+        menuSc.enabled = false;
+        scoreManager.enabled = false;
+        inputField.gameObject.SetActive(true);
+    }
 }

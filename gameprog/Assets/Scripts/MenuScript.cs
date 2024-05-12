@@ -7,16 +7,14 @@ using UnityEngine.UI;
 public class MenuScript : MonoBehaviour
 {
     private PlayerMovement playerMovement;
-
-    private Canvas menu;
-
     private InventoryScript inventoryScript;
-
-
+    private ChatManager chatManager;
     private ScoreManager scoreManagerScript;
+    private Canvas menu;
 
     private void Start()
     {
+        chatManager = FindAnyObjectByType<ChatManager>();
         scoreManagerScript = FindAnyObjectByType<ScoreManager>();
         playerMovement = FindObjectOfType<PlayerMovement>();
         menu = GameObject.Find("MenuUI").GetComponent<Canvas>();
@@ -32,6 +30,7 @@ public class MenuScript : MonoBehaviour
             {
                 scoreManagerScript.enabled = true;
                 inventoryScript.enabled = true;
+                chatManager.enabled = true;
                 playerMovement.isInMenu = false;
                 menu.enabled = false;
             }
@@ -39,6 +38,7 @@ public class MenuScript : MonoBehaviour
             {
                 scoreManagerScript.enabled = false;
                 inventoryScript.enabled = false;
+                chatManager.enabled = false;
                 playerMovement.isInMenu = true;
                 menu.enabled = true;
             }

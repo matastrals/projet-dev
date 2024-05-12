@@ -9,18 +9,16 @@ using UnityEngine.UIElements;
 public class InventoryScript : MonoBehaviour
 {
     private PlayerMovement playerMovement;
-
-    private Canvas inventory;
-
     private MenuScript menu;
-
+    private ScoreManager scoreManagerScript;
+    private ChatManager chatManager;
+    private Canvas inventory;
     public GameObject panel;
-
     private GameObject[] panelChild;
 
-    private ScoreManager scoreManagerScript;
     void Start()
     {
+        chatManager = FindAnyObjectByType<ChatManager>();
         scoreManagerScript = FindAnyObjectByType<ScoreManager>();
         playerMovement = FindObjectOfType<PlayerMovement>();
         inventory = GameObject.Find("Inventory").GetComponent<Canvas>();
@@ -44,6 +42,7 @@ public class InventoryScript : MonoBehaviour
             {
                 scoreManagerScript.enabled = true;
                 menu.enabled = true;
+                chatManager.enabled = true;
                 playerMovement.isInMenu = false;
                 inventory.enabled = false;
             }
@@ -51,6 +50,7 @@ public class InventoryScript : MonoBehaviour
             {
                 scoreManagerScript.enabled = false;
                 menu.enabled = false;
+                chatManager.enabled = false;
                 playerMovement.isInMenu = true;
                 inventory.enabled = true;
             }

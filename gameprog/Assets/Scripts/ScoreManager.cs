@@ -12,10 +12,12 @@ public class ScoreManager : MonoBehaviour
     private string playerName;
     private MenuScript menuScript;
     private InventoryScript inventoryScript;
+    private ChatManager chatManager;
     private Canvas scoreManager;
 
     private void Start()
     {
+        chatManager = FindAnyObjectByType<ChatManager>();
         menuScript = FindObjectOfType<MenuScript>();
         inventoryScript = FindObjectOfType<InventoryScript>();
         playerName = PlayerPrefs.GetString("PlayerName");
@@ -29,6 +31,7 @@ public class ScoreManager : MonoBehaviour
             {
                 scoreManager.enabled = false;
                 playerMovement.isInMenu = false;
+                chatManager.enabled = true;
                 menuScript.enabled = true;
                 inventoryScript.enabled = true;
             }
@@ -36,6 +39,7 @@ public class ScoreManager : MonoBehaviour
             {
                 scoreManager.enabled = true;
                 playerMovement.isInMenu = true;
+                chatManager.enabled = false;
                 menuScript.enabled = false;
                 inventoryScript.enabled = false;
             }

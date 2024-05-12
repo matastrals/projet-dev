@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 using TMPro;
 using JetBrains.Annotations;
 
-public class TestServer : MonoBehaviour
+public class Server : MonoBehaviour
 {
     private List<ServerClient> clients;
     private List<ServerClient> disconnectList;
