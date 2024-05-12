@@ -48,7 +48,7 @@ public class ScoreManager : MonoBehaviour
 
         if (playerMovement != null) 
         {
-            scoreText.text = "Joueur: " + playerName + "\nScore: " + playerMovement.GetNumberOfMoves().ToString();
+            scoreText.text = "Player: " + playerName + "\nScore: " + playerMovement.GetNumberOfMoves().ToString();
         }
     }
 
